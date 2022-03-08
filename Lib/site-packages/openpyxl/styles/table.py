@@ -1,3 +1,5 @@
+# Copyright (c) 2010-2021 openpyxl
+
 from openpyxl.descriptors.serialisable import Serialisable
 from openpyxl.descriptors import (
     Typed,
@@ -47,7 +49,7 @@ class TableStyle(Serialisable):
     pivot = Bool(allow_none=True)
     table = Bool(allow_none=True)
     count = Integer(allow_none=True)
-    tableStyleElement = Typed(expected_type=TableStyleElement, allow_none=True)
+    tableStyleElement = Sequence(expected_type=TableStyleElement, allow_none=True)
 
     __elements__ = ('tableStyleElement',)
 
@@ -56,7 +58,7 @@ class TableStyle(Serialisable):
                  pivot=None,
                  table=None,
                  count=None,
-                 tableStyleElement=None,
+                 tableStyleElement=(),
                 ):
         self.name = name
         self.pivot = pivot

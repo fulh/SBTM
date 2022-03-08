@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.db import models
 from organization.models import CourseOrg,Teacher
-from extra_apps.DjangoUeditor.models import UEditorField
+from DjangoUeditor.models import UEditorField
 
 
 
@@ -19,7 +19,7 @@ class Course(models.Model):
     name = models.CharField("课程名",max_length=50)
     desc = models.CharField("课程描述",max_length=300)
     # detail = models.TextField("课程详情")
-    detail = UEditorField(verbose_name=u'课程详情', width=600, height=300, imagePath="courses/ueditor/",
+    detail = UEditorField(verbose_name=u'课程详情', width="600", height="300", imagePath="courses/ueditor/",
                           filePath="courses/ueditor/", default='')
 
 

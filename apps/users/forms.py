@@ -1,8 +1,6 @@
-# users/forms.py
-
 from django import forms
 from captcha.fields import CaptchaField
-from apps.users.models import UserProfile
+from users.models import UserProfile
 
 
 class LoginForm(forms.Form):

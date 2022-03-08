@@ -29,7 +29,7 @@ class CourseAdmin(object):
     # list_editable = ['degree','desc']
     # refresh_times = [3,5]                #自动刷新（里面是秒数范围）
     inlines = [LessonInline,CourseResourceInline]    #增加章节和课程资源
-    style_fields = {"detail": "ueditor"}
+    style_fields = {'detail':'ueditor'}
 
     def queryset(self):
         # 重载queryset方法，来过滤出我们想要的数据的

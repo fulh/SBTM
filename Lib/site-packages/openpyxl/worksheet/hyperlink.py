@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from openpyxl.descriptors.serialisable import Serialisable
 from openpyxl.descriptors import (
     String,
@@ -49,8 +47,6 @@ class HyperlinkList(Serialisable):
 
     def __bool__(self):
         return bool(self.hyperlink)
-
-    __nonzero__ = __bool__
 
 
     def __len__(self):

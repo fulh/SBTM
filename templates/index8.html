@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.css" />
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts-liquidfill.min.js"></script>
+    <title>横向两列布局</title>
+<style>
+*{margin:0;padding:0;}
+#warp{
+    width:98%;
+    margin:0 auto;
+    margin-top:5px;
+}
+herder{
+    height:50px;
+    background:blue;
+}
+#nav{
+    height:360px;
+    background: #e3ff8a;
+    margin:5px 0;
+}
+#mod{
+    height:40px;
+    background: #e3ff8a;
+    margin:5px 0;
+}
+#main{
+    width:100%;
+    margin-bottom:2px;
+    overflow:hidden;
+}
+#main .main-left{
+    width:49.9%;
+    height:300px;
+    background: #fdffe6;
+    float:left;
+}
+#main .main-right{
+    width:49.9%;
+    height:300px;
+    background: #fff8f3;
+    float:right;
+}
+#content{
+    width:100%;
+    overflow:hidden;
+}
+#content .content-left{
+    width:49.9%;
+    height:300px;
+    background: #e8eec9;
+    float:left;
+}
+#content .content-right{
+    width:49.9%;
+    height:300px;
+    background: #eee4c7;
+    float:right;
+}
+#content .content-right-sup{
+    width:300px;
+    height:500px;
+    background: #fffdf4;
+    float:right;
+}
+#content .content-right-sub{
+    width:300px;
+    height:240px;
+    background: #fff3da;
+    margin-top:20px;
+    float:right;
+}
+</style>
+</head>
+<body>
+<div id="warp">
+    <div id="nav" class="nav"></div>
+    <div id="mod" class="mod">
+        <button type="button" class="btn btn-primary" id="publicbig">公共</button>
+        <button type="button" class="btn btn-success" id="reproductionbig">繁殖</button>
+        <button type="button" class="btn btn-danger" id="fattenbig">育肥</button>
+        <button type="button" class="btn btn-warning" id="purchasebig">购销</button>
+    </div>
+    <div id="main">
+        <div class="main-left" id="main-left">左-上</div>
+        <div class="main-right" id="main-right">右-上</div>
+    </div>
+    <div id="content">
+        <div class="content-left" id="content-left">左-下</div>
+        <div class="content-right" id="content-right">右-上</div>
+    </div>
+</div>
+<script>
+        var chartnav = echarts.init(document.getElementById('nav'));
+        var chartone = echarts.init(document.getElementById('main-left'));
+        var charttwo = echarts.init(document.getElementById('main-right'));
+        var chartthree = echarts.init(document.getElementById('content-left'));
+        var chartfour = echarts.init(document.getElementById('content-right'));
+        url="http://127.0.0.1:8000/chars/bar/"
+
+        $('#publicbig').click(fetchmainleft);
+        $('#reproductionbig').click(fetchmainright);
+        $('#fattenbig').click(fetchcontentleft);
+        $('#purchasebig').click(fetchcontentright);
+
+
+
+
+        function sleep1(ms, callback) {
+                setTimeout(callback, ms)
+            }
+            //sleep 1s
+            sleep1(600, () => {
+                fetchmainleft(chartone);
+            })
+            sleep1(200, () => {
+                fetchmainright(charttwo);
+            })
+            sleep1(400, () => {
+                fetchcontentleft(chartthree);
+            })
+            sleep1(500, () => {
+                fetchcontentright(chartfour);
+            })
+
+        $(
+            function () {
+                fetchSumData(chartnav);
+            }
+        );
+
+        function fetchSumData() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/chars/sumdate",
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                     chartnav.setOption(result.data);
+                }
+            })
+        };
+
+
+        function fetchmainleft() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/chars/Cultivates/12",
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        var aa = result.data.series[ac].itemStyle
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                    chartone.hideLoading();
+                    chartone.setOption(result.data);
+                    chartone.trigger("click");
+                    chartone.on("click",function (e) {
+                        var id =e.data.id
+                        fetchmodleright(charttwo,id)
+                    })
+
+                }
+            });
+
+        }
+
+        function fetchmainright() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/chars/Cultivates/1",
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        var aa = result.data.series[ac].itemStyle
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                    charttwo.hideLoading();
+                    charttwo.setOption(result.data);
+                    charttwo.trigger("click");
+                    charttwo.on("click",function (e) {
+                        console.log(e)
+                        var id =e.data.id
+                        fetchmodleright(chartfour,id)
+                    })
+
+
+                }
+            });
+
+        }
+
+        function fetchcontentleft() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/chars/Cultivates/2",
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        var aa = result.data.series[ac].itemStyle
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                    chartthree.hideLoading();
+                    chartthree.setOption(result.data);
+                    chartthree.trigger("click");
+                    chartthree.on("click",function (e) {
+                        var id =e.data.id
+                        fetchmodleright(chartfour,id)
+                    })
+
+                }
+            });
+
+        }
+        function fetchcontentright() {
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:8000/chars/Cultivates/3",
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        var aa = result.data.series[ac].itemStyle
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                    chartfour.hideLoading();
+                    chartfour.setOption(result.data,true);
+                    chartfour.trigger("click")
+                    chartfour.on("click",function (e) {
+                        var id =e.data.id
+                        fetchmodleright(chartthree,id)
+                    })
+                }
+            });
+
+        }
+        function fetchmodleright(chartmodule,id) {
+            $.ajax({
+                type: "GET",
+                url: url+id,
+                dataType: 'json',
+                success: function (result) {
+                    for (ac in result.data.series){
+                        var aa = result.data.series[ac].itemStyle
+                        result.data.series[0].itemStyle['color'] = dc
+                    }
+                    chartmodule.setOption(result.data);
+                }
+            });
+
+        }
+
+        function dc(params) {
+			if (params.value > 0 && params.value < 50) {
+				return 'green';
+			} else if (params.value > 50 && params.value < 100) {
+				return 'blue';
+			}
+			return 'red';
+		}
+    </script>
+</body>
+</html>

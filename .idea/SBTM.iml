@@ -20,6 +20,10 @@
       <sourceFolder url="file://$MODULE_DIR$/apps/course" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/apps/charts" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/extra_apps" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/extra_apps/xadmin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/extra_apps/DjangoUeditor" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

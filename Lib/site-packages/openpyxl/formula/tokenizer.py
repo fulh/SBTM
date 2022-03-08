@@ -10,7 +10,7 @@ import re
 
 
 class TokenizerError(Exception):
-    "Base class for all Tokenizer errors."
+    """Base class for all Tokenizer errors."""
 
 
 class Tokenizer(object):
@@ -18,10 +18,10 @@ class Tokenizer(object):
     """
     A tokenizer for Excel worksheet formulae.
 
-    Converts a unicode string representing an Excel formula (in A1 notation)
+    Converts a str string representing an Excel formula (in A1 notation)
     into a sequence of `Token` objects.
 
-    `formula`: The unicode string to tokenize
+    `formula`: The str string to tokenize
 
     Tokenizer defines a method `._parse()` to parse the formula into tokens,
     which can then be accessed through the `.items` attribute.
@@ -29,7 +29,7 @@ class Tokenizer(object):
     """
 
     SN_RE = re.compile("^[1-9](\\.[0-9]+)?[Ee]$")  # Scientific notation
-    WSPACE_RE = re.compile(" +")
+    WSPACE_RE = re.compile(r"[ \n]+")
     STRING_REGEXES = {
         # Inside a string, all characters are treated as literals, except for
         # the quote character used to start the string. That character, when
@@ -53,7 +53,7 @@ class Tokenizer(object):
         self._parse()
 
     def _parse(self):
-        "Populate self.items with the tokens from the formula."
+        """Populate self.items with the tokens from the formula."""
         if self.offset:
             return  # Already parsed!
         if not self.formula:
@@ -68,6 +68,7 @@ class Tokenizer(object):
             ('[', self._parse_brackets),
             ('#', self._parse_error),
             (' ', self._parse_whitespace),
+            ('\n', self._parse_whitespace),
             ('+-*/^&=><%', self._parse_operator),
             ('{(', self._parse_opener),
             (')}', self._parse_closer),
@@ -104,16 +105,14 @@ class Tokenizer(object):
         self.offset)
 
         """
-        self.assert_empty_token()
+        self.assert_empty_token(can_follow=':')
         delim = self.formula[self.offset]
         assert delim in ('"', "'")
         regex = self.STRING_REGEXES[delim]
         match = regex.match(self.formula[self.offset:])
         if match is None:
             subtype = "string" if delim == '"' else 'link'
-            raise TokenizerError(
-                "Reached end of formula while parsing %s in %s" %
-                (subtype, self.formula))
+            raise TokenizerError(f"Reached end of formula while parsing {subtype} in {self.formula}")
         match = match.group(0)
         if delim == '"':
             self.items.append(Token.make_operand(match))
@@ -130,12 +129,21 @@ class Tokenizer(object):
 
         """
         assert self.formula[self.offset] == '['
-        right = self.formula.find(']', self.offset) + 1
-        if right == 0:
-            raise TokenizerError(
-                "Encountered unmatched '[' in %s" % self.formula)
-        self.token.append(self.formula[self.offset: right])
-        return right - self.offset
+        lefts = [(t.start(), 1) for t in
+                 re.finditer(r"\[", self.formula[self.offset:])]
+        rights = [(t.start(), -1) for t in
+                  re.finditer(r"\]", self.formula[self.offset:])]
+
+        open_count = 0
+        for idx, open_close in sorted(lefts + rights):
+            open_count += open_close
+            if open_count == 0:
+                outer_right = idx + 1
+                self.token.append(
+                    self.formula[self.offset:self.offset + outer_right])
+                return outer_right
+
+        raise TokenizerError(f"Encountered unmatched '[' in {self.formula}")
 
     def _parse_error(self):
         """
@@ -145,16 +153,15 @@ class Tokenizer(object):
         characters matched. (Does not update self.offset)
 
         """
-        self.assert_empty_token()
+        self.assert_empty_token(can_follow='!')
         assert self.formula[self.offset] == '#'
         subformula = self.formula[self.offset:]
         for err in self.ERROR_CODES:
             if subformula.startswith(err):
-                self.items.append(Token.make_operand(err))
+                self.items.append(Token.make_operand(''.join(self.token) + err))
+                del self.token[:]
                 return len(err)
-        raise TokenizerError(
-            "Invalid error code at position %d in '%s'" %
-            (self.offset, self.formula))
+        raise TokenizerError(f"Invalid error code at position {self.offset} in '{self.formula}'")
 
     def _parse_whitespace(self):
         """
@@ -163,15 +170,15 @@ class Tokenizer(object):
         Returns the number of spaces found. (Does not update self.offset).
 
         """
-        assert self.formula[self.offset] == ' '
-        self.items.append(Token(' ', Token.WSPACE))
+        assert self.formula[self.offset] in (' ', '\n')
+        self.items.append(Token(self.formula[self.offset], Token.WSPACE))
         return self.WSPACE_RE.match(self.formula[self.offset:]).end()
 
     def _parse_operator(self):
         """
         Consume the characters constituting an operator.
 
-        Returns the number of charactes consumed. (Does not update
+        Returns the number of characters consumed. (Does not update
         self.offset)
 
         """
@@ -191,8 +198,9 @@ class Tokenizer(object):
         elif not self.items:
             token = Token(curr_char, Token.OP_PRE)
         else:
-            prev = self.items[-1]
-            is_infix = (
+            prev = next((i for i in reversed(self.items)
+                         if i.type != Token.WSPACE), None)
+            is_infix = prev and (
                 prev.subtype == Token.CLOSE
                 or prev.type == Token.OP_POST
                 or prev.type == Token.OPERAND
@@ -208,7 +216,7 @@ class Tokenizer(object):
         """
         Consumes a ( or { character.
 
-        Returns the number of charactes consumed. (Does not update
+        Returns the number of characters consumed. (Does not update
         self.offset)
 
         """
@@ -230,7 +238,7 @@ class Tokenizer(object):
         """
         Consumes a } or ) character.
 
-        Returns the number of charactes consumed. (Does not update
+        Returns the number of characters consumed. (Does not update
         self.offset)
 
         """
@@ -246,7 +254,7 @@ class Tokenizer(object):
         """
         Consumes a ; or , character.
 
-        Returns the number of charactes consumed. (Does not update
+        Returns the number of characters consumed. (Does not update
         self.offset)
 
         """
@@ -284,18 +292,19 @@ class Tokenizer(object):
             return True
         return False
 
-    def assert_empty_token(self):
+    def assert_empty_token(self, can_follow=()):
         """
         Ensure that there's no token currently being parsed.
+
+        Or if there is a token being parsed, it must end with a character in
+        can_follow.
 
         If there are unconsumed token contents, it means we hit an unexpected
         token transition. In this case, we raise a TokenizerError
 
         """
-        if self.token:
-            raise TokenizerError(
-                "Unexpected character at position %d in '%s'" %
-                (self.offset, self.formula))
+        if self.token and self.token[-1] not in can_follow:
+            raise TokenizerError(f"Unexpected character at position {self.offset} in '{self.formula}'")
 
     def save_token(self):
         """If there's a token being parsed, add it to the item list."""
@@ -304,7 +313,7 @@ class Tokenizer(object):
             del self.token[:]
 
     def render(self):
-        "Convert the parsed tokens back to a string."
+        """Convert the parsed tokens back to a string."""
         if not self.items:
             return ""
         elif self.items[0].type == Token.LITERAL:
@@ -362,7 +371,7 @@ class Token(object):
 
     @classmethod
     def make_operand(cls, value):
-        "Create an operand token."
+        """Create an operand token."""
         if value.startswith('"'):
             subtype = cls.TEXT
         elif value.startswith('#'):
@@ -382,7 +391,7 @@ class Token(object):
     #
     # There are 3 types of `Subexpressions`: functions, array literals, and
     # parentheticals. Subexpressions have 'OPEN' and 'CLOSE' tokens. 'OPEN'
-    # is used when parsing the initital expression token (i.e., '(' or '{')
+    # is used when parsing the initial expression token (i.e., '(' or '{')
     # and 'CLOSE' is used when parsing the closing expression token ('}' or
     # ')').
 
@@ -412,7 +421,7 @@ class Token(object):
         return cls(value, type_, subtype)
 
     def get_closer(self):
-        "Return a closing token that matches this token's type."
+        """Return a closing token that matches this token's type."""
         assert self.type in (self.FUNC, self.ARRAY, self.PAREN)
         assert self.subtype == self.OPEN
         value = "}" if self.type == self.ARRAY else ")"
@@ -431,7 +440,7 @@ class Token(object):
 
     @classmethod
     def make_separator(cls, value):
-        "Create a separator token"
+        """Create a separator token"""
         assert value in (',', ';')
         subtype = cls.ARG if value == ',' else cls.ROW
         return cls(value, cls.SEP, subtype)

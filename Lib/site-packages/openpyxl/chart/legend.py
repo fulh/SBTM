@@ -1,3 +1,5 @@
+# Copyright (c) 2010-2021 openpyxl
+
 from openpyxl.descriptors.serialisable import Serialisable
 from openpyxl.descriptors import (
     Typed,
@@ -26,7 +28,7 @@ class LegendEntry(Serialisable):
     txPr = Typed(expected_type=RichText, allow_none=True)
     extLst = Typed(expected_type=ExtensionList, allow_none=True)
 
-    __elements__ = ('idx',)
+    __elements__ = ('idx', 'delete', 'txPr')
 
     def __init__(self,
                  idx=0,

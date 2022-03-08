@@ -9,7 +9,6 @@ from django.contrib.auth.backends import ModelBackend
 from users.models import UserProfile,EmailVerifyRecord
 from django.db.models import Q
 from django.views.generic.base import View
-from users.forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.hashers import make_password
 from utils.email_send import send_register_eamil
@@ -20,6 +19,7 @@ from organization.models import CourseOrg,Teacher
 from course.models import Course
 from users.models import Banner
 from django.urls import reverse
+from users.forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm
 
 
 #邮箱和用户名都可以登录
