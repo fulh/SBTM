@@ -27,7 +27,7 @@ class Course(models.Model):
     learn_times = models.IntegerField("学习时长(分钟数)",default=0)
     students = models.IntegerField("学习人数",default=0)
     fav_nums = models.IntegerField("收藏人数",default=0)
-    image = models.ImageField("封面图",upload_to="courses/%Y/%m",max_length=100)
+    image = models.ImageField("封面图",upload_to="courses/%Y/%m",max_length=100,blank=True)
     click_nums = models.IntegerField("点击数",default=0)
     tag = models.CharField('课程标签',default='',max_length=10)
     is_banner = models.BooleanField('是否轮播',default=False)
@@ -46,6 +46,13 @@ class Course(models.Model):
         #获取课程的章节数
         return self.lesson_set.all().count()
     get_zj_nums.short_description = '章节数'   #在后台显示的名称
+
+
+    # def born_in_fifties(self):
+    #     return self.is_banner = 'False'
+    # # 关键在这里
+    # born_in_fifties.boolean = True
+    # born_in_fifties.short_description = '轮播'
 
     def go_to(self):
         from django.utils.safestring import mark_safe

@@ -22,6 +22,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,6 +90,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(BASE_DIR / 'db.sqlite3'),
+    },
+    'db': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db2.sqlite3'),
     }
 }
 
@@ -112,12 +121,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # 发送邮箱
-
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.qq.com"
-EMAIL_PORT = 25
+EMAIL_PORT = 456
 EMAIL_HOST_USER = "631230485@qq.com"
-EMAIL_HOST_PASSWORD = "dwjybikeqdawhhbc"
+EMAIL_HOST_PASSWORD = "fulihua09263319"
 EMAIL_USE_TLS= True
+# EMAIL_USE_SSL = True
 EMAIL_FROM = "631230485@qq.com"
 
 
@@ -132,9 +142,17 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
+DATABASE_ROUTERS = ['db_router.MasterSlaveDBRouter']
+DATABASE_APPS_MAPPING = {
+    # 'users': 'default',
+    'charts': 'db',
+    'course': 'db',
+    'operation': 'db',
+    'organization': 'db',
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

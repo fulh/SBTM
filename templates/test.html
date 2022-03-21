@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}首页{% endblock %}
+
+{% block custom_bread %}
+{% endblock %}
+
+{% block content %}
+
+<!--banner end-->
+
+    <section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list" id="right group_list">
+                        {{progress_bar_charts| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list" id="right group_list">
+                        {{reproduction_bar_charts| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    <section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{fattenone_bar_charts| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{purchaseAndsale_bar_charts| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{purchaseAndsaleapp_bar_charts|safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{fattenoneapp_bar_charts|safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    	</section>
+    	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{fattentwo_bar_charts|safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    	</section>
+    	<section>
+		<div class="module">
+			<div class="wp">
+				<div class="module1 eachmod">
+					<div class="right group_list">
+                        {{fattentwoapp_bar_charts|safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+

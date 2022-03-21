@@ -38,6 +38,10 @@ class CourseAdmin(object):
         qs = qs.filter(is_banner=False)
         return qs
 
+
+
+
+
     def save_models(self):
         # 在保存课程的时候统计课程机构的课程数
         # obj实际是一个course对象
@@ -64,6 +68,7 @@ class BannerCourseAdmin(object):
     readonly_fields = ['click_nums']
     exclude = ['fav_nums']
     inlines = [LessonInline,CourseResourceInline]
+    style_fields = {'detail': 'ueditor'}
 
     def queryset(self):
         #重载queryset方法，来过滤出我们想要的数据的

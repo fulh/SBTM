@@ -1,0 +1,107 @@
+{# 继承自xadmin中的base_site.html #}
+{% extends 'xadmin/base_site.html' %}
+
+{# 去掉标签栏 #}
+{% block content-nav %}
+
+{% endblock %}
+
+
+{% load staticfiles %}
+{% block title %}首页index1{% endblock %}
+
+{% block custom_bread %}
+{% endblock %}
+
+{% block content %}
+
+<!--banner end-->
+<!--feature start-->
+{#	<section>#}
+{#		<div class="wp">#}
+{#			<ul class="feature">#}
+{#				<li class="feature1">#}
+{#                    {{liquid_public| safe }}#}
+{#				</li>#}
+{#				<li class="feature2">#}
+{#                    {{liquid_reproduction| safe }}#}
+{#				</li>#}
+{#				<li class="feature3">#}
+{#                    {{liquid_fatten| safe }}#}
+{#				</li>#}
+{#				<li class="feature4">#}
+{#                    {{liquid_purchaseAndsale|safe }}#}
+{#				</li>#}
+{#			</ul>#}
+{#		</div>#}
+{#	</section>#}
+<!--feature end-->
+<!--module1 start-->
+    <section>
+		<div class="module">
+			<div class="wp">
+				<h1>缺陷情况统计</h1>
+				<div class="module1 eachmod">
+					<div class="right group_list" id="right group_list">
+                        {{two_bar| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="module">
+			<div class="wp">
+				<h1>云苍穹-公共</h1>
+				<div class="module1 eachmod">
+					<div class="right group_list" id="right group_list">
+                        {{charts_public| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    <section>
+		<div class="module">
+			<div class="wp">
+				<h1>云苍穹-繁殖</h1>
+				<div class="module1 eachmod">
+
+					<div class="right group_list">
+                        {{charts_reproduction| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    	<section>
+		<div class="module">
+			<div class="wp">
+				<h1>云苍穹-育肥</h1>
+				<div class="module1 eachmod">
+
+					<div class="right group_list">
+                        {{charts_fatten| safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section>
+		<div class="module greybg">
+			<div class="wp">
+				<h1>云苍穹-购销</h1>
+				<div class="module3 eachmod">
+
+					<div class="right">
+                        {{charts_purchaseAndsale|safe }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+{% block custom_js %}
+<script type="text/javascript" src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+

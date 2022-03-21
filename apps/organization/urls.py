@@ -5,6 +5,7 @@ from organization.views import OrgView,AddUserAskView
 from django.urls import path,re_path
 from .views import OrgHomeView,OrgCourseView,OrgDescView,OrgTeacherView,AddFavView
 from .views import TeacherListView,TeacherDetailView
+from . import views
 
 # 要写上app的名字
 app_name = "organization"
@@ -23,5 +24,6 @@ urlpatterns = [
     path('teacher/list/', TeacherListView.as_view(), name="teacher_list"),
     # 讲师详情
     re_path('teacher/detail/(?P<teacher_id>\d+)/', TeacherDetailView.as_view(), name="teacher_detail"),
+    path('^teacher/signNotice/(\d+)',views.Sign_notice, name='sign_notice')
 
 ]

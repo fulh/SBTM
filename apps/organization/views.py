@@ -1,6 +1,6 @@
 #-*-coding:utf-8 -*-，
 
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
 from django.views.generic import View
 from .models import CourseOrg,CityDict,Teacher
@@ -12,6 +12,7 @@ from operation.models import UserFavorite
 from course.models import Course
 from django.contrib.auth import authenticate
 from django.db.models import Q
+from .admin import TeacherAdmin
 
 class OrgView(View):
     '''课程机构'''
@@ -294,3 +295,11 @@ class TeacherDetailView(LoginRequiredMixin,View):
             'has_teacher_faved':has_teacher_faved,
             'has_org_faved':has_org_faved,
         })
+
+def Sign_notice(request,param):
+
+    # qs = Teacher.objects.get(id=param)
+    # qs.fav_nums=3
+    # qs.save()
+    TeacherAdmin.qianshou_notice(request)
+    return redirect('../')

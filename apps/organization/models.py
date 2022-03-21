@@ -14,6 +14,8 @@ class CityDict(models.Model):
     class Meta:
         verbose_name = '城市'
         verbose_name_plural= verbose_name
+    def __str__(self):
+        return self.name
 
 
 class CourseOrg(models.Model):
@@ -24,11 +26,13 @@ class CourseOrg(models.Model):
     image = models.ImageField('封面图',upload_to='org/%Y%m',max_length=100)
     address = models.CharField('机构地址',max_length=150,)
     city = models.ForeignKey(CityDict,verbose_name='所在城市',on_delete=models.CASCADE)
-    add_time = models.DateTimeField(default=datetime.now)
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='新增时间')
 
     class Meta:
         verbose_name = '课程机构'
         verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.name
 
 
 class Teacher(models.Model):
@@ -42,9 +46,26 @@ class Teacher(models.Model):
     fav_nums = models.IntegerField('收藏数',default=0)
     add_time = models.DateTimeField(default=datetime.now)
 
+    # def go_to(self):
+    #     from django.utils.safestring import mark_safe
+    #     return mark_safe("<a href='http://wwww.baidu.com'>跳转</a>")
+    #
+    # go_to.short_description = "跳转"
+
+    # 显示新的一列为链接
+    def qianshou(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='signNotice/%s''>签收</a>" % self.id)  # content.id是当前记录对应的ID
+
+    qianshou.short_description = '操作'
+
     class Meta:
         verbose_name = '教师'
         verbose_name_plural = verbose_name
 
+
+
     def __str__(self):
         return "[{0}]的教师: {1}".format(self.org, self.name)
+
+

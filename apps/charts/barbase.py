@@ -14,8 +14,8 @@ import django
 
 from . import unitbar
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'article_blog.settings')
-django.setup()
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'article_blog.settings')
+# django.setup()
 
 
 def charts_base(sqlstr) -> Bar:
@@ -221,7 +221,7 @@ def bar_base(sqlname, sqlline, progresssql, listproduct, sqltoday=None) -> Bar:
 def bar_Liquid(progresssql, name) -> Bar:
 	jd, jdleng = SQLTool().select_include_name(progresssql)
 	c = (
-		Liquid(init_opts=opts.InitOpts(height="290px", width="285px"))
+		Liquid(init_opts=opts.InitOpts(height="260px", width="220px"))
 			.add("进度", [jd[0]["num"] / 100], is_outline_show=False, )
 			.set_global_opts(title_opts=opts.TitleOpts(title=name + "进度", pos_right="center", pos_top=20,
 		                                               title_textstyle_opts=opts.TextStyleOpts(color="#7077ee")),
@@ -468,7 +468,7 @@ def bugTrend_bar(bugTrend):
 			title_opts=opts.TitleOpts(title="缺陷趋势图",
 				                          subtitle="缺陷趋势图"),
 			xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=25, interval="0")),
-			datazoom_opts=opts.DataZoomOpts(range_start=65,range_end=100),
+			datazoom_opts=opts.DataZoomOpts(range_start=75,range_end=100),
 			tooltip_opts=opts.TooltipOpts(
 				# is_show=True,axis_pointer_type= "cross",trigger="axis",
 

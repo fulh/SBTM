@@ -18,7 +18,7 @@ class UserCourseAdmin(object):
     '''用户课程学习'''
 
     list_display = ['user', 'course', 'add_time']
-    search_fields = ['user', 'course']
+    search_fields = ['user__nick_name', 'course__name']
     list_filter = ['user', 'course', 'add_time']
 
 
@@ -36,7 +36,7 @@ class CourseCommentsAdmin(object):
     '''用户评论后台'''
 
     list_display = ['user', 'course', 'comments', 'add_time']
-    search_fields = ['user', 'course', 'comments']
+    search_fields = ['user__nick_name', 'course__name', 'comments']
     list_filter = ['user', 'course', 'comments', 'add_time']
 
 
@@ -45,7 +45,7 @@ class UserFavoriteAdmin(object):
     '''用户收藏后台'''
 
     list_display = ['user', 'fav_id', 'fav_type', 'add_time']
-    search_fields = ['user', 'fav_id', 'fav_type']
+    search_fields = ['user__nick_name', 'fav_id', 'fav_type']
     list_filter = ['user', 'fav_id', 'fav_type', 'add_time']
 
 
