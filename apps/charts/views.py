@@ -6,6 +6,7 @@ from .barbase import bar_base, charts_base, bar_test, bar_Liquid, bar_two, progr
 from django.shortcuts import render
 from .sql_util import SQLTool
 from .table import table
+import time
 
 
 
@@ -288,7 +289,7 @@ class progress(APIView):
 		purchaseAndsale_list = {
 			"购销云测试计划": ["采购-基础资料", "销售-基础资料", "采购-供应商管理", "销售-客户管理", "销售-行情管理", "采购-采购管理", "销售-交易管理", "销售-安全管理"]}
 		fattenoneapp_list = {"邦养宝APP": ["首页", "任务执行", "养户管理", "投苗申请", "饲养管理", "上市管理", "生物安全", "电子耳标", "检测管理", "报表管理"]}
-		purchaseAndsaleapp_list = {"邦购销APP": ["首页", "销售管理", "仔猪采购", "种猪采购"]}
+		purchaseAndsaleapp_list = {"邦购销APP": ["销售管理", "仔猪采购", "种猪采购"]}
 		fattentwo_list = {"自养育肥云": ["基础档案", "投苗管理业务流程", "饲养管理业务流程", "物资领用","自养-计划系统"]}
 		fattentwoapp_list = {
 			"邦育肥APP": ["首页", "投苗管理", "饲养管理", "物资领用", "任务管理", "免疫管理", "保健管理", "新开育肥场", "生物安全", "防疫管理", "上市管理"]}
@@ -321,6 +322,7 @@ class zhengbagn(APIView):
 		dic_list = {"公共": "12", "繁殖": "1", "育肥": "2", "购销": "3"}
 		dicResult = SQLTool().select_test("select  line,  AVG(number)as num from zt_progress  GROUP BY line")
 		dic_lista = {}
+		# time.sleep(10)
 		for k, v in dic_list.items():
 			for a in dicResult:
 				if int(a[0]) == int(v):

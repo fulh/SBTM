@@ -222,5 +222,5 @@ class BarChartsAdmin(object):
 
 
 
-# xadmin.site.register(Progress, ProgressAdmin)
-# xadmin.site.register(BarCharts, BarChartsAdmin)
+xadmin.site.register(Progress, ProgressAdmin)
+xadmin.site.register(BarCharts, BarChartsAdmin)

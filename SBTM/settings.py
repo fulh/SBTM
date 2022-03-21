@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.LoggingMiddleware.LogMiddle'
 ]
 
 ROOT_URLCONF = 'SBTM.urls'
@@ -166,3 +167,45 @@ STATICFILES_DIRS = (
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOG_PATH = os.path.join(BASE_DIR,'LOG')
+LOGGING = {
+    'version': 1,
+    # 禁用日志
+    'disable_existing_loggers': False,
+    'loggers': {
+        '': {
+            # 将系统接受到的体制，交给handler去处理
+            'handlers': ['console'],
+            'level': 'INFO',
+        }
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': '%s/%s' % (LOG_PATH, 'asm.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 文件大小
+            'backupCount': 5,  # 备份数
+            # 'formatter': 'standard',  # 输出格式
+            'encoding': 'utf-8',  # 设置默认编码，否则打印出来汉字乱码
+        },
+        'console': {
+            # handler将日志信息存放在day6/logs/sys.log
+            'filename': '%s/%s' % (LOG_PATH, 'asmBAK.log'),
+            'level': 'INFO',
+            # 指定日志的格式
+            'formatter': '',
+            # 备份
+            'class': 'logging.handlers.RotatingFileHandler',
+            # 日志文件大小：5M
+            'maxBytes': 5 * 1024 * 1024,
+            'encoding':"utf-8"
+        }
+    },
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s %(message)s'
+        }
+    }
+}
