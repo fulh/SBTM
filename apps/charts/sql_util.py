@@ -3,8 +3,6 @@ import traceback
 import threading
 import pymysql
 
-
-
 db = pymysql.connect(host="10.88.3.214", user="root", password="123456",db="zentao", charset="utf8",init_command='SET NAMES UTF8',use_unicode=True)
 
 class SQLTool:
@@ -41,9 +39,6 @@ class SQLTool:
 		return List
 
 
-
-
-
 	# 返回元组套元组数据
 	def select(self, sqlstr):
 		lock = threading.Lock()
@@ -58,6 +53,7 @@ class SQLTool:
 		cur.close()
 		lock.release()
 		return List, iTotal_length
+
 
 	# 返回列表套字典数据
 	def select_include_name(self, sqlstr):
@@ -84,6 +80,7 @@ class SQLTool:
 		cur.close()
 		return r
 
+
 	# 插入数据
 	def insert(self, sql, param):
 		cur = self.cursor
@@ -91,6 +88,7 @@ class SQLTool:
 		db.commit()
 		cur.close()
 		return n
+
 
 	def release(self):
 		return 0

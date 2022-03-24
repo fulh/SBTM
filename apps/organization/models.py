@@ -19,8 +19,14 @@ class CityDict(models.Model):
 
 
 class CourseOrg(models.Model):
+    ORG_CHOICES = (
+        ("pxjg", u"培训机构"),
+        ("gx", u"高校"),
+        ("gr", u"个人"),
+    )
     name = models.CharField('机构名称',max_length=50)
     desc = models.TextField('机构描述')
+    category = models.CharField(max_length=20, choices=ORG_CHOICES, verbose_name=u"机构类别", default="pxjg")
     click_nums = models.IntegerField('点击数',default=0)
     fav_nums = models.IntegerField('收藏数',default=0)
     image = models.ImageField('封面图',upload_to='org/%Y%m',max_length=100)
@@ -31,6 +37,11 @@ class CourseOrg(models.Model):
     class Meta:
         verbose_name = '课程机构'
         verbose_name_plural = verbose_name
+
+    def get_teacher_nums(self):
+        #获取机构的教师数
+        return self.teacher_set.all().count()
+
     def __str__(self):
         return self.name
 

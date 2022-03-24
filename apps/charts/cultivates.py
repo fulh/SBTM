@@ -1,6 +1,7 @@
 # coding=utf-8
 from .sql_util import SQLTool
 
+
 def modulebug(sql):
 	alist = []
 	aindex = ('value', 'name', 'id')

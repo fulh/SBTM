@@ -45,21 +45,23 @@ class GlobalSettings(object):
     #         )},
     #
     #     )
-    def get_site_menu(self):
-        return [
-            {
-                'title': 'Bug统计',
-                'icon': 'fa fa-area-chart',
-                'menus': (
-                    {
-                        'title': 'Bug表',
-                        'icon': 'fa fa-area-chart',
-                        'url':self.get_model_url(Course, 'changelist'),  # 自定义跳转列表
 
-                    },)
-            }
 
-        ]
+    # def get_site_menu(self):
+    #     return [
+    #         {
+    #             'title': 'Bug统计',
+    #             'icon': 'fa fa-area-chart',
+    #             'menus': (
+    #                 {
+    #                     'title': 'Bug表',
+    #                     'icon': 'fa fa-area-chart',
+    #                     'url':self.get_model_url(Course, 'changelist'),  # 自定义跳转列表
+    #
+    #                 },)
+    #         }
+    #
+    #     ]
 
 
 

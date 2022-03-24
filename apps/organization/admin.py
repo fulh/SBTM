@@ -24,9 +24,12 @@ class CityDictAdmin(object):
 class CourseOrgAdmin(object):
     '''机构'''
 
-    list_display = ['name', 'desc', 'click_nums', 'fav_nums','add_time' ]
+    list_display = ['name', 'desc', 'click_nums', 'fav_nums','add_time','city' ]
     search_fields = ['name', 'desc', 'click_nums', 'fav_nums']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums','city__name','address','add_time']
+    # list_export = None
+    list_export = []
+    show_bookmarks = False
 
 
 class TeacherAdmin(object):
