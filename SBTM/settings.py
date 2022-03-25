@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'course.apps.CourseConfig',
     'operation.apps.OperationConfig',
     'organization.apps.OrganizationConfig',
+    'interface.apps.InterfaceConfig',
     'captcha',
     'pure_pagination',
     'DjangoUeditor',

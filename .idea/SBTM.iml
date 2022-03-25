@@ -24,6 +24,7 @@
       <sourceFolder url="file://$MODULE_DIR$/apps" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/extra_apps/xadmin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/extra_apps/DjangoUeditor" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/interface" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
