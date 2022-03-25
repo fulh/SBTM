@@ -1,6 +1,6 @@
 import xadmin
 from .models import Project,TestCase,Module
-
+from xadmin.layout import Fieldset
 
 class ProjectAdmin(object):
     list_display = ("id", "name", "proj_owner", "test_owner", "dev_owner", "desc", "create_time", "update_time")
@@ -12,11 +12,16 @@ class ModuleAdmin(object):
 
 class TestCaseAdmin(object):
     list_display = (
-        "id", "case_name", "belong_project", "belong_module", "request_data", "uri", "assert_key", "maintainer",
-        "extract_var", "request_method", "status", "created_time", "updated_time", "user")
-    # def save_model(self, request, obj, form, change):
-    #     obj.user = request.user
-    #     obj.save()
+        "id", "case_name", "belong_project", "request_data", "uri", "assert_key", "maintainer",
+        "extract_var", "request_method", "status", "created_time", "updated_time",'user')
+    form_layout = (
+        Fieldset(None,
+                 'case_name', 'belong_project', 'request_data', 'uri'
+                 ),
+        Fieldset(None,
+                 'pc_parent', **{"style": "display:None"}
+                 ),
+    )
 
 
 xadmin.site.register(Project,ProjectAdmin)
