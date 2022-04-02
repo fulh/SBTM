@@ -1,11 +1,29 @@
 #-*-coding:utf-8 -*-，
 from django.db import models
-
-
+import uuid
+import os
+import time
 from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+def upload_user_image_path(instance, filename):
+    first,two = filename.split('.')
+    return os.path.join(
+        'user',
+        'head_portrait',
+        instance.first_name+instance.last_name+'-'+time.strftime("%Y-%m-%d", time.localtime( time.time()))+'.'+two,
+    )
+
+def thumbnail_image_path(instance, filename):
+    first,two = filename.split('.')
+    return os.path.join(
+        'user',
+        'thumbnail',
+        instance.first_name+instance.last_name+'-'+time.strftime("%Y-%m-%d", time.localtime( time.time()))+'.'+two,
+    )
+
 
 class UserProfile(AbstractUser):
     gender_choices = (
@@ -18,7 +36,8 @@ class UserProfile(AbstractUser):
     gender = models.CharField('性别',max_length=10,choices=gender_choices,default='female')
     adress = models.CharField('地址',max_length=100,default='')
     mobile = models.CharField('手机号',max_length=11,null=True,blank=True)
-    image = models.ImageField(upload_to='image/%Y%m',default='image/default.png',max_length=100)
+    image = models.ImageField(upload_to=upload_user_image_path,default='image/default.png',max_length=100)
+    thumbnail =models.ImageField(upload_to=thumbnail_image_path,default='image/default.png',max_length=100)
 
     class Meta:
         verbose_name = '用户信息'

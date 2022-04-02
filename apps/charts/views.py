@@ -53,7 +53,7 @@ class progress(APIView):
 	def get(self, request, *args, **kwargs):
 		#缺陷趋势图
 		bugTrend_bar_charts = bugTrend_bar(sqlfile.bugEveryTrend).render_embed()
-		progress_bar_charts = progress_bar(public_list).render_embed()
+		progress_bar_charts = progress_bar(sqlfile.public_list).render_embed()
 		reproduction_bar_charts = progress_bar(sqlfile.reproduction_list).render_embed()
 		fattenone_bar_charts = progress_bar(sqlfile.fattenone_list).render_embed()
 		purchaseAndsale_bar_charts = progress_bar(sqlfile.purchaseAndsale_list).render_embed()

@@ -4,6 +4,9 @@ import json
 from django.shortcuts import render
 from django.contrib.auth import authenticate,login,logout
 from django.http import HttpResponse,HttpResponseRedirect
+import uuid
+import os
+from io import BytesIO
 
 from django.contrib.auth.backends import ModelBackend
 from users.models import UserProfile,EmailVerifyRecord
@@ -20,6 +23,12 @@ from course.models import Course
 from users.models import Banner
 from django.urls import reverse
 from users.forms import LoginForm,RegisterForm,ForgetPwdForm,ModifyPwdForm
+from PIL import Image
+
+
+from django.core.cache import cache
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 
 
 #邮箱和用户名都可以登录
@@ -238,12 +247,36 @@ class UploadImageView(LoginRequiredMixin,View):
         #上传的文件都在request.FILES里面获取，所以这里要多传一个这个参数
         image_form = UploadImageForm(request.POST,request.FILES)
         if image_form.is_valid():
-            image = image_form.cleaned_data['image']
+            # image = image_form.cleaned_data['image']
+            image = request.FILES['image']
+            crop_image = self.crop_image(image)
             request.user.image = image
+            request.user.thumbnail= crop_image
             request.user.save()
             return HttpResponse('{"status":"success"}', content_type='application/json')
         else:
             return HttpResponse('{"status":"fail"}', content_type='application/json')
+
+
+    def crop_image(self,image):
+        # 随机生成新的图片名，自定义路径。
+        image_data = [image.file, image.field_name, image.name, image.content_type,
+                      image.size, image.charset, image.content_type_extra]
+        cache_key = 'image_key'
+        cache.set(cache_key, image_data, 60)
+        cache_data = cache.get(cache_key)
+        image1 = InMemoryUploadedFile(*image_data)
+
+        # 裁剪图片,压缩尺寸为200*200。
+        img = Image.open(image)
+        crop_im = img.resize((200, 200), Image.ANTIALIAS)
+        img_byte = BytesIO()
+        crop_im.save(img_byte, format='PNG')
+        pic_file = InMemoryUploadedFile(file=img_byte, field_name=image.field_name, name=image.name,
+                                        content_type=img.format, size=img.size, charset=None)
+        return pic_file
+
+
 
 
 class UpdatePwdView(View):

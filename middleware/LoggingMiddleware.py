@@ -40,8 +40,9 @@ class LogMiddle(MiddlewareMixin):
             #获取当前时间
             localtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-            #URL的消耗市场
+            #URL的消耗时长
             execute_time = round((time.time() - request.init_time),3)
+
 
             # 请求路径
             current_url = request.build_absolute_uri()
